@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe App - Chiikawa Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #FFF5F5 0%, #F0F8FF 100%);
+            min-height: 100vh;
+            color: #8B4513;
+        }
+
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen {
+            display: none;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header với Chiikawa mascot */
+        .header {
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            padding: 15px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(255,182,193,0.3);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            text-align: center;
+            color: #8B4513;
+            margin-bottom: 5px;
+        }
+
+        .mascot {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+        }
+
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            background: #F0F8FF;
+            border-radius: 20px;
+            padding: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #8B4513;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #FFE4E6, #FFF0F5);
+            box-shadow: 0 4px 8px rgba(255,182,193,0.3);
+        }
+
+        /* Recipe Cards */
+        .recipe-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(255,182,193,0.2);
+            border: 3px solid #FFE4E6;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255,182,193,0.3);
+        }
+
+        .recipe-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 0 4px 15px rgba(255,182,193,0.4);
+        }
+
+        .recipe-title {
+            font-size: 18px;
+            color: #8B4513;
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .recipe-time {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            color: #CD853F;
+            font-size: 12px;
+        }
+
+        .time-badge {
+            background: #FFF8DC;
+            padding: 4px 8px;
+            border-radius: 10px;
+            border: 1px solid #F0E68C;
+        }
+
+        /* Detail Screen */
+        .detail-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .detail-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 8px 25px rgba(255,182,193,0.4);
+        }
+
+        .ingredient-section, .steps-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(255,182,193,0.15);
+            border: 2px solid #FFE4E6;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #8B4513;
+            margin-bottom: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #FFB6C1, #FFC0CB);
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .ingredient-item, .step-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #FFF8F8;
+            border-radius: 15px;
+            border-left: 4px solid #FFB6C1;
+            color: #8B4513;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Form screens */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #8B4513;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #FFE4E6;
+            border-radius: 15px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #8B4513;
+            background: #FEFEFE;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #FFB6C1;
+            box-shadow: 0 0 0 3px rgba(255,182,193,0.2);
+        }
+
+        .image-picker {
+            width: 120px;
+            height: 120px;
+            border: 3px dashed #FFB6C1;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            cursor: pointer;
+            background: #FFF8F8;
+            transition: all 0.3s ease;
+        }
+
+        .image-picker:hover {
+            background: #FFE4E6;
+            border-color: #FF91A4;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255,182,193,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,182,193,0.4);
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255,182,193,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Login Screen */
+        .login-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-mascot {
+            text-align: center;
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 24px;
+            color: #8B4513;
+            margin-bottom: 30px;
+        }
+
+        /* Bottom tabs */
+        .bottom-tabs {
+            display: flex;
+            background: white;
+            border-radius: 25px 25px 0 0;
+            padding: 15px;
+            box-shadow: 0 -4px 20px rgba(255,182,193,0.2);
+            margin: 10px -20px -20px -20px;
+        }
+
+        .bottom-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            color: #8B4513;
+        }
+
+        .bottom-tab.active {
+            background: linear-gradient(135deg, #FFE4E6, #FFF0F5);
+            box-shadow: 0 4px 8px rgba(255,182,193,0.2);
+        }
+
+        .tab-icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .tab-text {
+            font-size: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- Login Screen -->
+        <div class="screen active" id="login-screen">
+            <div class="login-container">
+                <div class="login-mascot">🐹</div>
+                <h2 class="login-title">Chào mừng đến với<br>Recipe Chiikawa!</h2>
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email của bạn">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Mật khẩu">
+                </div>
+                <button class="submit-btn" onclick="showScreen('home-screen')">Đăng nhập 🌸</button>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div class="screen" id="home-screen">
+            <div class="header">
+                <h1>Công thức yêu thích</h1>
+                <div class="mascot">🐹</div>
+            </div>
+
+            <div class="nav-tabs">
+                <div class="nav-tab active">Tất cả</div>
+                <div class="nav-tab">Món chính</div>
+                <div class="nav-tab">Tráng miệng</div>
+            </div>
+
+            <div class="recipe-grid">
+                <div class="recipe-card" onclick="showScreen('detail-screen')">
+                    <div class="recipe-image">🍜</div>
+                    <div class="recipe-title">Phở Bò Chiikawa</div>
+                    <div class="recipe-time">
+                        <span class="time-badge">⏱️ 30p</span>
+                        <span class="time-badge">🔥 3h</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-image">🍱</div>
+                    <div class="recipe-title">Cơm Tấm Dễ Thương</div>
+                    <div class="recipe-time">
+                        <span class="time-badge">⏱️ 15p</span>
+                        <span class="time-badge">🔥 45p</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-image">🧁</div>
+                    <div class="recipe-title">Bánh Cupcake Hồng</div>
+                    <div class="recipe-time">
+                        <span class="time-badge">⏱️ 20p</span>
+                        <span class="time-badge">🔥 25p</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-image">🍲</div>
+                    <div class="recipe-title">Lẩu Thái Chua Cay</div>
+                    <div class="recipe-time">
+                        <span class="time-badge">⏱️ 25p</span>
+                        <span class="time-badge">🔥 1h</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-btn" onclick="showScreen('add-screen')">+</div>
+
+            <div class="bottom-tabs">
+                <div class="bottom-tab active">
+                    <span class="tab-icon">🏠</span>
+                    <span class="tab-text">Trang chủ</span>
+                </div>
+                <div class="bottom-tab" onclick="showScreen('my-recipes-screen')">
+                    <span class="tab-icon">📝</span>
+                    <span class="tab-text">Của tôi</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Screen -->
+        <div class="screen" id="detail-screen">
+            <div class="header">
+                <h1>Chi tiết công thức</h1>
+                <div class="mascot">🐹</div>
+            </div>
+
+            <div class="detail-header">
+                <div class="detail-image">🍜</div>
+                <h2 class="recipe-title">Phở Bò Chiikawa</h2>
+                <div class="recipe-time">
+                    <span class="time-badge">⏱️ Chuẩn bị: 30 phút</span>
+                    <span class="time-badge">🔥 Nấu: 3 giờ</span>
+                </div>
+            </div>
+
+            <div class="ingredient-section">
+                <h3 class="section-title">🥕 Nguyên liệu</h3>
+                <div class="ingredient-item">🦴 Xương bò: 1kg</div>
+                <div class="ingredient-item">🍖 Thịt bò: 300g</div>
+                <div class="ingredient-item">🍜 Bánh phở: 500g</div>
+                <div class="ingredient-item">🧅 Hành tây: 2 củ</div>
+                <div class="ingredient-item">🌿 Rau thơm: 1 bó</div>
+            </div>
+
+            <div class="steps-section">
+                <h3 class="section-title">👩‍🍳 Cách làm</h3>
+                <div class="step-item">
+                    <span class="step-number">1</span>
+                    Ninh xương bò với hành tây, gừng trong 3 tiếng để có nước dùng trong
+                </div>
+                <div class="step-item">
+                    <span class="step-number">2</span>
+                    Luộc bánh phở trong nước sôi 2-3 phút, vớt ra để ráo
+                </div>
+                <div class="step-item">
+                    <span class="step-number">3</span>
+                    Thái thịt bò mỏng, chuẩn bị rau thơm
+                </div>
+                <div class="step-item">
+                    <span class="step-number">4</span>
+                    Trình bày bánh phở, thịt bò, chan nước dùng nóng và thưởng thức
+                </div>
+            </div>
+
+            <div class="bottom-tabs">
+                <div class="bottom-tab" onclick="showScreen('home-screen')">
+                    <span class="tab-icon">🏠</span>
+                    <span class="tab-text">Trang chủ</span>
+                </div>
+                <div class="bottom-tab">
+                    <span class="tab-icon">❤️</span>
+                    <span class="tab-text">Yêu thích</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Recipe Screen -->
+        <div class="screen" id="add-screen">
+            <div class="header">
+                <h1>Thêm công thức mới</h1>
+                <div class="mascot">🐹</div>
+            </div>
+
+            <div style="flex: 1; overflow-y: auto; padding-right: 10px;">
+                <div class="image-picker">
+                    <span style="color: #FFB6C1; font-size: 40px;">📷</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🍽️ Tên món ăn</label>
+                    <input type="text" class="form-input" placeholder="Ví dụ: Phở Bò Chiikawa">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📝 Mô tả</label>
+                    <textarea class="form-input" rows="3" placeholder="Mô tả về món ăn của bạn..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">⏱️ Chuẩn bị (phút)</label>
+                        <input type="number" class="form-input" placeholder="30">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">🔥 Nấu (phút)</label>
+                        <input type="number" class="form-input" placeholder="180">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🥕 Nguyên liệu</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" class="form-input" placeholder="Tên nguyên liệu" style="flex: 2;">
+                        <input type="text" class="form-input" placeholder="Số lượng" style="flex: 1;">
+                        <input type="text" class="form-input" placeholder="Đơn vị" style="flex: 1;">
+                    </div>
+                    <button style="background: #FFE4E6; border: 1px dashed #FFB6C1; color: #8B4513; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%;">+ Thêm nguyên liệu</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">👩‍🍳 Các bước làm</label>
+                    <textarea class="form-input" rows="4" placeholder="Bước 1: Chuẩn bị nguyên liệu..."></textarea>
+                    <button style="background: #FFE4E6; border: 1px dashed #FFB6C1; color: #8B4513; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px;">+ Thêm bước</button>
+                </div>
+
+                <button class="submit-btn" onclick="showScreen('home-screen')">Lưu công thức 🌸</button>
+            </div>
+        </div>
+
+        <!-- My Recipes Screen -->
+        <div class="screen" id="my-recipes-screen">
+            <div class="header">
+                <h1>Công thức của tôi</h1>
+                <div class="mascot">🐹</div>
+            </div>
+
+            <div class="recipe-grid">
+                <div class="recipe-card">
+                    <div class="recipe-image">🍜</div>
+                    <div class="recipe-title">Phở Bò Chiikawa</div>
+                    <div class="recipe-time">
+                        <span class="time-badge">✏️ Sửa</span>
+                        <span class="time-badge">🗑️ Xóa</span>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-image">🧁</div>
+                    <div class="recipe-title">Bánh Cupcake Hồng</div>
+                    <div class="recipe-time">
+                        <span class="time-badge">✏️ Sửa</span>
+                        <span class="time-badge">🗑️ Xóa</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-btn" onclick="showScreen('add-screen')">+</div>
+
+            <div class="bottom-tabs">
+                <div class="bottom-tab" onclick="showScreen('home-screen')">
+                    <span class="tab-icon">🏠</span>
+                    <span class="tab-text">Trang chủ</span>
+                </div>
+                <div class="bottom-tab active">
+                    <span class="tab-icon">📝</span>
+                    <span class="tab-text">Của tôi</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => screen.classList.remove('active'));
+            
+            // Show target screen
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
