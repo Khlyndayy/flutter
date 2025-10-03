@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe App - Chiikawa Style</title>
+    <title>Recipe Chiikawa - Full App</title>
     <style>
         * {
             margin: 0;
@@ -41,29 +41,79 @@
             flex-direction: column;
         }
 
-        /* Header với Chiikawa mascot */
-        .header {
+        /* Personalized Header */
+        .header-personalized {
             background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
             padding: 15px;
             border-radius: 25px;
             margin-bottom: 20px;
-            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 8px 20px rgba(255,182,193,0.3);
         }
 
-        .header h1 {
-            font-size: 22px;
-            text-align: center;
-            color: #8B4513;
-            margin-bottom: 5px;
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .mascot {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 30px;
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(255,105,180,0.3);
+        }
+
+        .user-greeting {
+            color: #8B4513;
+        }
+
+        .greeting-text {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .user-status {
+            font-size: 11px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: #8B4513;
+        }
+
+        .header-btn:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.1);
         }
 
         /* Navigation tabs */
@@ -85,7 +135,7 @@
             transition: all 0.3s ease;
             color: #8B4513;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .nav-tab.active {
@@ -117,21 +167,36 @@
             box-shadow: 0 12px 30px rgba(255,182,193,0.3);
         }
 
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
         .recipe-image {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
-            margin: 0 auto 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 35px;
+            font-size: 30px;
             box-shadow: 0 4px 15px rgba(255,182,193,0.4);
         }
 
+        .recipe-author {
+            font-size: 10px;
+            color: #CD853F;
+            background: #FFF8DC;
+            padding: 3px 8px;
+            border-radius: 8px;
+            border: 1px solid #F0E68C;
+        }
+
         .recipe-title {
-            font-size: 18px;
+            font-size: 16px;
             color: #8B4513;
             text-align: center;
             margin-bottom: 8px;
@@ -141,15 +206,15 @@
         .recipe-time {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             color: #CD853F;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .time-badge {
             background: #FFF8DC;
-            padding: 4px 8px;
-            border-radius: 10px;
+            padding: 3px 6px;
+            border-radius: 8px;
             border: 1px solid #F0E68C;
         }
 
@@ -170,6 +235,29 @@
             justify-content: center;
             font-size: 60px;
             box-shadow: 0 8px 25px rgba(255,182,193,0.4);
+        }
+
+        .recipe-detail-title {
+            font-size: 20px;
+            color: #8B4513;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .recipe-detail-meta {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-author {
+            color: #CD853F;
+            font-size: 12px;
+            background: #FFF8DC;
+            padding: 5px 10px;
+            border-radius: 10px;
+            border: 1px solid #F0E68C;
         }
 
         .ingredient-section, .steps-section {
@@ -224,7 +312,131 @@
             margin-right: 10px;
         }
 
-        /* Form screens */
+        /* Profile Screen */
+        .profile-header {
+            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            padding: 25px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(255,182,193,0.3);
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            box-shadow: 0 8px 25px rgba(255,105,180,0.4);
+        }
+
+        .profile-name {
+            font-size: 22px;
+            color: #8B4513;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .profile-email {
+            color: #8B4513;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .profile-join-date {
+            color: #8B4513;
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .profile-stats {
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(255,182,193,0.15);
+            border: 2px solid #FFE4E6;
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF69B4;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #8B4513;
+        }
+
+        /* Settings Menu */
+        .settings-menu {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 20px rgba(255,182,193,0.15);
+            border: 2px solid #FFE4E6;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #FFF8F8;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .settings-item:hover {
+            background: #FFE4E6;
+        }
+
+        .settings-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFE4E6, #FFF0F5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .settings-item.danger .settings-icon {
+            background: #FFE6E6;
+        }
+
+        .settings-item.danger {
+            color: #D8000C;
+        }
+
+        /* Forms */
         .form-group {
             margin-bottom: 20px;
         }
@@ -284,6 +496,10 @@
             cursor: pointer;
             box-shadow: 0 6px 20px rgba(255,182,193,0.3);
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .submit-btn:hover {
@@ -326,6 +542,19 @@
             text-align: center;
             font-size: 80px;
             margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
         }
 
         .login-title {
@@ -335,7 +564,7 @@
             margin-bottom: 30px;
         }
 
-        /* Bottom tabs */
+        /* Bottom Navigation */
         .bottom-tabs {
             display: flex;
             background: white;
@@ -361,14 +590,31 @@
         }
 
         .tab-icon {
-            font-size: 20px;
+            font-size: 18px;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         .tab-text {
             font-size: 10px;
             font-weight: 600;
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #FFE4E6;
+            border-radius: 50%;
+            border-top-color: #FFB6C1;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
@@ -380,31 +626,49 @@
                 <div class="login-mascot">🐹</div>
                 <h2 class="login-title">Chào mừng đến với<br>Recipe Chiikawa!</h2>
                 <div class="form-group">
-                    <input type="email" class="form-input" placeholder="Email của bạn">
+                    <input type="email" class="form-input" placeholder="📧 Email của bạn" id="login-email" value="nguyenvana@example.com">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-input" placeholder="Mật khẩu">
+                    <input type="password" class="form-input" placeholder="🔒 Mật khẩu" id="login-password" value="123456">
                 </div>
-                <button class="submit-btn" onclick="showScreen('home-screen')">Đăng nhập 🌸</button>
+                <button class="submit-btn" onclick="login()">
+                    <span id="login-btn-text">Đăng nhập 🌸</span>
+                    <span id="login-spinner" class="loading-spinner" style="display: none;"></span>
+                </button>
+                <div style="text-align: center; margin-top: 15px; font-size: 12px; color: #CD853F;">
+                    💡 Demo: Nhập email/password bất kỳ để đăng nhập
+                </div>
             </div>
         </div>
 
         <!-- Home Screen -->
         <div class="screen" id="home-screen">
-            <div class="header">
-                <h1>Công thức yêu thích</h1>
-                <div class="mascot">🐹</div>
+            <div class="header-personalized">
+                <div class="user-section">
+                    <div class="user-avatar" id="user-avatar">A</div>
+                    <div class="user-greeting">
+                        <div class="greeting-text" id="user-greeting">Chào An!</div>
+                        <div class="user-status">🐹 <span id="user-role">Đầu bếp tại nhà</span></div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="showScreen('profile-screen')">👤</button>
+                    <button class="header-btn" onclick="showSettings()">⚙️</button>
+                </div>
             </div>
 
             <div class="nav-tabs">
-                <div class="nav-tab active">Tất cả</div>
-                <div class="nav-tab">Món chính</div>
-                <div class="nav-tab">Tráng miệng</div>
+                <div class="nav-tab active" onclick="filterRecipes('all')">Tất cả</div>
+                <div class="nav-tab" onclick="filterRecipes('main')">Món chính</div>
+                <div class="nav-tab" onclick="filterRecipes('dessert')">Tráng miệng</div>
             </div>
 
-            <div class="recipe-grid">
-                <div class="recipe-card" onclick="showScreen('detail-screen')">
-                    <div class="recipe-image">🍜</div>
+            <div class="recipe-grid" id="recipe-grid">
+                <div class="recipe-card" onclick="showRecipeDetail('pho-bo')">
+                    <div class="recipe-header">
+                        <div class="recipe-image">🍜</div>
+                        <div class="recipe-author">👤 An</div>
+                    </div>
                     <div class="recipe-title">Phở Bò Chiikawa</div>
                     <div class="recipe-time">
                         <span class="time-badge">⏱️ 30p</span>
@@ -412,8 +676,11 @@
                     </div>
                 </div>
 
-                <div class="recipe-card">
-                    <div class="recipe-image">🍱</div>
+                <div class="recipe-card" onclick="showRecipeDetail('com-tam')">
+                    <div class="recipe-header">
+                        <div class="recipe-image">🍱</div>
+                        <div class="recipe-author">👤 Mai</div>
+                    </div>
                     <div class="recipe-title">Cơm Tấm Dễ Thương</div>
                     <div class="recipe-time">
                         <span class="time-badge">⏱️ 15p</span>
@@ -421,8 +688,11 @@
                     </div>
                 </div>
 
-                <div class="recipe-card">
-                    <div class="recipe-image">🧁</div>
+                <div class="recipe-card" onclick="showRecipeDetail('cupcake')">
+                    <div class="recipe-header">
+                        <div class="recipe-image">🧁</div>
+                        <div class="recipe-author">👤 An</div>
+                    </div>
                     <div class="recipe-title">Bánh Cupcake Hồng</div>
                     <div class="recipe-time">
                         <span class="time-badge">⏱️ 20p</span>
@@ -430,8 +700,11 @@
                     </div>
                 </div>
 
-                <div class="recipe-card">
-                    <div class="recipe-image">🍲</div>
+                <div class="recipe-card" onclick="showRecipeDetail('lau-thai')">
+                    <div class="recipe-header">
+                        <div class="recipe-image">🍲</div>
+                        <div class="recipe-author">👤 Hoa</div>
+                    </div>
                     <div class="recipe-title">Lẩu Thái Chua Cay</div>
                     <div class="recipe-time">
                         <span class="time-badge">⏱️ 25p</span>
@@ -443,150 +716,254 @@
             <div class="floating-btn" onclick="showScreen('add-screen')">+</div>
 
             <div class="bottom-tabs">
-                <div class="bottom-tab active">
+                <div class="bottom-tab active" onclick="switchTab('home')">
                     <span class="tab-icon">🏠</span>
                     <span class="tab-text">Trang chủ</span>
                 </div>
-                <div class="bottom-tab" onclick="showScreen('my-recipes-screen')">
+                <div class="bottom-tab" onclick="switchTab('my-recipes')">
                     <span class="tab-icon">📝</span>
                     <span class="tab-text">Của tôi</span>
+                </div>
+                <div class="bottom-tab" onclick="switchTab('profile')">
+                    <span class="tab-icon">👤</span>
+                    <span class="tab-text">Cá nhân</span>
                 </div>
             </div>
         </div>
 
-        <!-- Detail Screen -->
-        <div class="screen" id="detail-screen">
-            <div class="header">
-                <h1>Chi tiết công thức</h1>
-                <div class="mascot">🐹</div>
+        <!-- Profile Screen -->
+        <div class="screen" id="profile-screen">
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profile-avatar">A</div>
+                <div class="profile-name" id="profile-name">Nguyễn Văn An</div>
+                <div class="profile-email" id="profile-email">📧 nguyenvana@example.com</div>
+                <div class="profile-join-date" id="profile-join-date">📅 Tham gia: 15/01/2024</div>
             </div>
 
-            <div class="detail-header">
-                <div class="detail-image">🍜</div>
-                <h2 class="recipe-title">Phở Bò Chiikawa</h2>
-                <div class="recipe-time">
-                    <span class="time-badge">⏱️ Chuẩn bị: 30 phút</span>
-                    <span class="time-badge">🔥 Nấu: 3 giờ</span>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="recipe-count">12</div>
+                    <div class="stat-label">Công thức</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="like-count">48</div>
+                    <div class="stat-label">Lượt thích</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="streak-count">7</div>
+                    <div class="stat-label">Ngày streak</div>
                 </div>
             </div>
 
-            <div class="ingredient-section">
-                <h3 class="section-title">🥕 Nguyên liệu</h3>
-                <div class="ingredient-item">🦴 Xương bò: 1kg</div>
-                <div class="ingredient-item">🍖 Thịt bò: 300g</div>
-                <div class="ingredient-item">🍜 Bánh phở: 500g</div>
-                <div class="ingredient-item">🧅 Hành tây: 2 củ</div>
-                <div class="ingredient-item">🌿 Rau thơm: 1 bó</div>
-            </div>
-
-            <div class="steps-section">
-                <h3 class="section-title">👩‍🍳 Cách làm</h3>
-                <div class="step-item">
-                    <span class="step-number">1</span>
-                    Ninh xương bò với hành tây, gừng trong 3 tiếng để có nước dùng trong
+            <div class="settings-menu">
+                <div class="settings-item">
+                    <div class="settings-item-left">
+                        <div class="settings-icon">✏️</div>
+                        <div>Chỉnh sửa thông tin</div>
+                    </div>
+                    <div>›</div>
                 </div>
-                <div class="step-item">
-                    <span class="step-number">2</span>
-                    Luộc bánh phở trong nước sôi 2-3 phút, vớt ra để ráo
+                <div class="settings-item">
+                    <div class="settings-item-left">
+                        <div class="settings-icon">🔔</div>
+                        <div>Thông báo</div>
+                    </div>
+                    <div>›</div>
                 </div>
-                <div class="step-item">
-                    <span class="step-number">3</span>
-                    Thái thịt bò mỏng, chuẩn bị rau thơm
+                <div class="settings-item">
+                    <div class="settings-item-left">
+                        <div class="settings-icon">🌙</div>
+                        <div>Chế độ tối</div>
+                    </div>
+                    <div>›</div>
                 </div>
-                <div class="step-item">
-                    <span class="step-number">4</span>
-                    Trình bày bánh phở, thịt bò, chan nước dùng nóng và thưởng thức
+                <div class="settings-item danger" onclick="logout()">
+                    <div class="settings-item-left">
+                        <div class="settings-icon">🚪</div>
+                        <div>Đăng xuất</div>
+                    </div>
+                    <div>›</div>
                 </div>
             </div>
 
             <div class="bottom-tabs">
-                <div class="bottom-tab" onclick="showScreen('home-screen')">
+                <div class="bottom-tab" onclick="switchTab('home')">
                     <span class="tab-icon">🏠</span>
                     <span class="tab-text">Trang chủ</span>
                 </div>
-                <div class="bottom-tab">
-                    <span class="tab-icon">❤️</span>
-                    <span class="tab-text">Yêu thích</span>
+                <div class="bottom-tab" onclick="switchTab('my-recipes')">
+                    <span class="tab-icon">📝</span>
+                    <span class="tab-text">Của tôi</span>
+                </div>
+                <div class="bottom-tab active">
+                    <span class="tab-icon">👤</span>
+                    <span class="tab-text">Cá nhân</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Detail Screen -->
+        <div class="screen" id="detail-screen">
+            <div class="header-personalized">
+                <div class="user-section">
+                    <button class="header-btn" onclick="showScreen('home-screen')">‹</button>
+                    <div style="margin-left: 10px; color: #8B4513; font-weight: bold;">Chi tiết công thức</div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="likeRecipe()">❤️</button>
+                    <button class="header-btn" onclick="shareRecipe()">📤</button>
+                </div>
+            </div>
+
+            <div class="detail-header">
+                <div class="detail-image" id="detail-image">🍜</div>
+                <h2 class="recipe-detail-title" id="detail-title">Phở Bò Chiikawa</h2>
+                <div class="recipe-detail-meta">
+                    <span class="time-badge" id="detail-prep-time">⏱️ Chuẩn bị: 30 phút</span>
+                    <span class="time-badge" id="detail-cook-time">🔥 Nấu: 3 giờ</span>
+                </div>
+                <div class="detail-author" id="detail-author">👤 Được tạo bởi Nguyễn Văn An</div>
+            </div>
+
+            <div class="ingredient-section">
+                <h3 class="section-title">🥕 Nguyên liệu</h3>
+                <div id="ingredients-list">
+                    <div class="ingredient-item">🦴 Xương bò: 1kg</div>
+                    <div class="ingredient-item">🍖 Thịt bò: 300g</div>
+                    <div class="ingredient-item">🍜 Bánh phở: 500g</div>
+                    <div class="ingredient-item">🧅 Hành tây: 2 củ</div>
+                    <div class="ingredient-item">🌿 Rau thơm: 1 bó</div>
+                </div>
+            </div>
+
+            <div class="steps-section">
+                <h3 class="section-title">👩‍🍳 Cách làm</h3>
+                <div id="steps-list">
+                    <div class="step-item">
+                        <span class="step-number">1</span>
+                        Ninh xương bò với hành tây, gừng trong 3 tiếng để có nước dùng trong
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">2</span>
+                        Luộc bánh phở trong nước sôi 2-3 phút, vớt ra để ráo
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">3</span>
+                        Thái thịt bò mỏng, chuẩn bị rau thơm
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">4</span>
+                        Trình bày bánh phở, thịt bò, chan nước dùng nóng và thưởng thức
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Add Recipe Screen -->
         <div class="screen" id="add-screen">
-            <div class="header">
-                <h1>Thêm công thức mới</h1>
-                <div class="mascot">🐹</div>
+            <div class="header-personalized">
+                <div class="user-section">
+                    <button class="header-btn" onclick="showScreen('home-screen')">‹</button>
+                    <div style="margin-left: 10px; color: #8B4513; font-weight: bold;">Thêm công thức mới</div>
+                </div>
+                <div class="header-actions">
+                    <div class="user-avatar" style="width: 35px; height: 35px; font-size: 14px;">A</div>
+                </div>
             </div>
 
             <div style="flex: 1; overflow-y: auto; padding-right: 10px;">
-                <div class="image-picker">
+                <div class="image-picker" onclick="selectImage()">
                     <span style="color: #FFB6C1; font-size: 40px;">📷</span>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">🍽️ Tên món ăn</label>
-                    <input type="text" class="form-input" placeholder="Ví dụ: Phở Bò Chiikawa">
+                    <input type="text" class="form-input" id="recipe-title" placeholder="Ví dụ: Phở Bò Chiikawa">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">📝 Mô tả</label>
-                    <textarea class="form-input" rows="3" placeholder="Mô tả về món ăn của bạn..."></textarea>
+                    <textarea class="form-input" id="recipe-description" rows="3" placeholder="Mô tả về món ăn của bạn..."></textarea>
                 </div>
 
                 <div style="display: flex; gap: 15px;">
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">⏱️ Chuẩn bị (phút)</label>
-                        <input type="number" class="form-input" placeholder="30">
+                        <input type="number" class="form-input" id="prep-time" placeholder="30">
                     </div>
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">🔥 Nấu (phút)</label>
-                        <input type="number" class="form-input" placeholder="180">
+                        <input type="number" class="form-input" id="cook-time" placeholder="180">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">🥕 Nguyên liệu</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <input type="text" class="form-input" placeholder="Tên nguyên liệu" style="flex: 2;">
-                        <input type="text" class="form-input" placeholder="Số lượng" style="flex: 1;">
-                        <input type="text" class="form-input" placeholder="Đơn vị" style="flex: 1;">
+                    <div id="ingredients-container">
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" class="form-input" placeholder="Tên nguyên liệu" style="flex: 2;">
+                            <input type="text" class="form-input" placeholder="Số lượng" style="flex: 1;">
+                            <input type="text" class="form-input" placeholder="Đơn vị" style="flex: 1;">
+                        </div>
                     </div>
-                    <button style="background: #FFE4E6; border: 1px dashed #FFB6C1; color: #8B4513; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%;">+ Thêm nguyên liệu</button>
+                    <button onclick="addIngredientField()" style="background: #FFE4E6; border: 1px dashed #FFB6C1; color: #8B4513; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-family: inherit; font-weight: bold;">+ Thêm nguyên liệu</button>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">👩‍🍳 Các bước làm</label>
-                    <textarea class="form-input" rows="4" placeholder="Bước 1: Chuẩn bị nguyên liệu..."></textarea>
-                    <button style="background: #FFE4E6; border: 1px dashed #FFB6C1; color: #8B4513; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px;">+ Thêm bước</button>
+                    <div id="steps-container">
+                        <textarea class="form-input" rows="4" placeholder="Bước 1: Chuẩn bị nguyên liệu..."></textarea>
+                    </div>
+                    <button onclick="addStepField()" style="background: #FFE4E6; border: 1px dashed #FFB6C1; color: #8B4513; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px; font-family: inherit; font-weight: bold;">+ Thêm bước</button>
                 </div>
 
-                <button class="submit-btn" onclick="showScreen('home-screen')">Lưu công thức 🌸</button>
+                <button class="submit-btn" onclick="saveRecipe()">Lưu công thức 🌸</button>
             </div>
         </div>
 
         <!-- My Recipes Screen -->
         <div class="screen" id="my-recipes-screen">
-            <div class="header">
-                <h1>Công thức của tôi</h1>
-                <div class="mascot">🐹</div>
+            <div class="header-personalized">
+                <div class="user-section">
+                    <div class="user-avatar">A</div>
+                    <div class="user-greeting">
+                        <div class="greeting-text">Công thức của tôi</div>
+                        <div class="user-status">🐹 <span id="my-recipe-count">12 công thức</span></div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="showScreen('add-screen')">+</button>
+                </div>
             </div>
 
             <div class="recipe-grid">
                 <div class="recipe-card">
-                    <div class="recipe-image">🍜</div>
+                    <div class="recipe-header">
+                        <div class="recipe-image">🍜</div>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="header-btn" style="width: 30px; height: 30px; font-size: 14px;" onclick="editRecipe('pho-bo')">✏️</button>
+                            <button class="header-btn" style="width: 30px; height: 30px; font-size: 14px; background: rgba(255,182,193,0.3);" onclick="deleteRecipe('pho-bo')">🗑️</button>
+                        </div>
+                    </div>
                     <div class="recipe-title">Phở Bò Chiikawa</div>
                     <div class="recipe-time">
-                        <span class="time-badge">✏️ Sửa</span>
-                        <span class="time-badge">🗑️ Xóa</span>
+                        <span class="time-badge">⏱️ 30p</span>
+                        <span class="time-badge">🔥 3h</span>
                     </div>
                 </div>
 
                 <div class="recipe-card">
-                    <div class="recipe-image">🧁</div>
+                    <div class="recipe-header">
+                        <div class="recipe-image">🧁</div>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="header-btn" style="width: 30px; height: 30px; font-size: 14px;" onclick="editRecipe('cupcake')">✏️</button>
+                            <button class="header-btn" style="width: 30px; height: 30px; font-size: 14px; background: rgba(255,182,193,0.3);" onclick="deleteRecipe('cupcake')">🗑️</button>
+                        </div>
+                    </div>
                     <div class="recipe-title">Bánh Cupcake Hồng</div>
                     <div class="recipe-time">
-                        <span class="time-badge">✏️ Sửa</span>
-                        <span class="time-badge">🗑️ Xóa</span>
+                        <span class="time-badge">⏱️ 20p</span>
+                        <span class="time-badge">🔥 25p</span>
                     </div>
                 </div>
             </div>
@@ -594,7 +971,7 @@
             <div class="floating-btn" onclick="showScreen('add-screen')">+</div>
 
             <div class="bottom-tabs">
-                <div class="bottom-tab" onclick="showScreen('home-screen')">
+                <div class="bottom-tab" onclick="switchTab('home')">
                     <span class="tab-icon">🏠</span>
                     <span class="tab-text">Trang chủ</span>
                 </div>
@@ -602,19 +979,234 @@
                     <span class="tab-icon">📝</span>
                     <span class="tab-text">Của tôi</span>
                 </div>
+                <div class="bottom-tab" onclick="switchTab('profile')">
+                    <span class="tab-icon">👤</span>
+                    <span class="tab-text">Cá nhân</span>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Current user data (từ GET /auth/me)
+        let currentUser = null;
+
+        // Login function - Simulate POST /auth/login và GET /auth/me
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Show loading
+            document.getElementById('login-btn-text').style.display = 'none';
+            document.getElementById('login-spinner').style.display = 'inline-block';
+
+            // Simulate API call
+            setTimeout(() => {
+                // Simulate POST /auth/login response
+                const loginResponse = {
+                    success: true,
+                    data: {
+                        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        user: {
+                            id: 1,
+                            email: email,
+                            name: "Nguyễn Văn An"
+                        }
+                    }
+                };
+
+                // Save token to localStorage
+                localStorage.setItem('auth_token', loginResponse.data.token);
+
+                // Simulate GET /auth/me to get full user info
+                fetchUserInfo();
+            }, 1500);
+        }
+
+        // Fetch user info - Simulate GET /auth/me
+        function fetchUserInfo() {
+            // Simulate API response
+            const userInfo = {
+                success: true,
+                data: {
+                    id: 1,
+                    email: "nguyenvana@example.com",
+                    name: "Nguyễn Văn An",
+                    avatar_url: null,
+                    created_at: "2024-01-15T10:30:00Z"
+                }
+            };
+
+            currentUser = userInfo.data;
+
+            // Update UI with user info
+            updateUserUI();
+
+            // Hide loading and go to home
+            document.getElementById('login-btn-text').style.display = 'inline';
+            document.getElementById('login-spinner').style.display = 'none';
+            showScreen('home-screen');
+        }
+
+        // Update UI with user data from GET /auth/me
+        function updateUserUI() {
+            if (!currentUser) return;
+
+            // Get first letter of name for avatar
+            const firstLetter = currentUser.name.charAt(0).toUpperCase();
+
+            // Update header
+            document.getElementById('user-avatar').textContent = firstLetter;
+            document.getElementById('user-greeting').textContent = `Chào ${currentUser.name.split(' ').pop()}!`;
+
+            // Update profile
+            document.getElementById('profile-avatar').textContent = firstLetter;
+            document.getElementById('profile-name').textContent = currentUser.name;
+            document.getElementById('profile-email').textContent = `📧 ${currentUser.email}`;
+            
+            // Format date
+            const joinDate = new Date(currentUser.created_at);
+            document.getElementById('profile-join-date').textContent = 
+                `📅 Tham gia: ${joinDate.getDate()}/${joinDate.getMonth() + 1}/${joinDate.getFullYear()}`;
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Bạn có chắc muốn đăng xuất? 🥺')) {
+                localStorage.removeItem('auth_token');
+                currentUser = null;
+                showScreen('login-screen');
+            }
+        }
+
+        // Show screen function
         function showScreen(screenId) {
-            // Hide all screens
             const screens = document.querySelectorAll('.screen');
             screens.forEach(screen => screen.classList.remove('active'));
-            
-            // Show target screen
             document.getElementById(screenId).classList.add('active');
         }
+
+        // Switch tab function
+        function switchTab(tab) {
+            // Remove active from all tabs
+            document.querySelectorAll('.bottom-tab').forEach(t => t.classList.remove('active'));
+            
+            // Show corresponding screen
+            if (tab === 'home') {
+                showScreen('home-screen');
+                document.querySelectorAll('.bottom-tab')[0].classList.add('active');
+            } else if (tab === 'my-recipes') {
+                showScreen('my-recipes-screen');
+                document.querySelectorAll('.bottom-tab')[1].classList.add('active');
+            } else if (tab === 'profile') {
+                showScreen('profile-screen');
+                document.querySelectorAll('.bottom-tab')[2].classList.add('active');
+            }
+        }
+
+        // Filter recipes
+        function filterRecipes(category) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // In real app, this would call GET /recipes with filter
+            console.log('Filter by:', category);
+        }
+
+        // Show recipe detail
+        function showRecipeDetail(recipeId) {
+            // In real app, this would call GET /recipes/{id}
+            showScreen('detail-screen');
+        }
+
+        // Add ingredient field
+        function addIngredientField() {
+            const container = document.getElementById('ingredients-container');
+            const newField = document.createElement('div');
+            newField.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
+            newField.innerHTML = `
+                <input type="text" class="form-input" placeholder="Tên nguyên liệu" style="flex: 2;">
+                <input type="text" class="form-input" placeholder="Số lượng" style="flex: 1;">
+                <input type="text" class="form-input" placeholder="Đơn vị" style="flex: 1;">
+            `;
+            container.appendChild(newField);
+        }
+
+        // Add step field
+        function addStepField() {
+            const container = document.getElementById('steps-container');
+            const stepNumber = container.children.length + 1;
+            const newField = document.createElement('textarea');
+            newField.className = 'form-input';
+            newField.rows = 4;
+            newField.placeholder = `Bước ${stepNumber}: ...`;
+            newField.style.marginTop = '10px';
+            container.appendChild(newField);
+        }
+
+        // Save recipe
+        function saveRecipe() {
+            const title = document.getElementById('recipe-title').value;
+            const description = document.getElementById('recipe-description').value;
+            const prepTime = document.getElementById('prep-time').value;
+            const cookTime = document.getElementById('cook-time').value;
+
+            if (!title || !prepTime || !cookTime) {
+                alert('Vui lòng điền đầy đủ thông tin! 🐹');
+                return;
+            }
+
+            // In real app, this would call POST /recipes
+            alert('Đã lưu công thức thành công! 🎉');
+            showScreen('home-screen');
+        }
+
+        // Select image
+        function selectImage() {
+            // In real app, this would call POST /upload/image
+            alert('Chức năng upload ảnh! 📷\n\nTrong app thật sẽ gọi API:\nPOST /upload/image');
+        }
+
+        // Edit recipe
+        function editRecipe(recipeId) {
+            // In real app, this would load recipe data and show edit form
+            alert('Chỉnh sửa công thức: ' + recipeId);
+            showScreen('add-screen');
+        }
+
+        // Delete recipe
+        function deleteRecipe(recipeId) {
+            if (confirm('Bạn có chắc muốn xóa công thức này? 🥺')) {
+                // In real app, this would call DELETE /recipes/{id}
+                alert('Đã xóa công thức!');
+            }
+        }
+
+        // Like recipe
+        function likeRecipe() {
+            alert('Đã thích công thức! ❤️');
+        }
+
+        // Share recipe
+        function shareRecipe() {
+            alert('Chia sẻ công thức! 📤');
+        }
+
+        // Show settings
+        function showSettings() {
+            alert('Cài đặt ⚙️');
+        }
+
+        // Check if user is logged in on page load
+        window.onload = function() {
+            const token = localStorage.getItem('auth_token');
+            if (token) {
+                // Simulate GET /auth/me to verify token and get user info
+                fetchUserInfo();
+                showScreen('home-screen');
+            }
+        };
     </script>
 </body>
 </html>
